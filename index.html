@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reporte de Actividades</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <div class="encabezado">
+
+            <img src="logo.png" alt="E.S.E. Municipal de Soacha Julio César Peñaloza">
+
+            <h1>Reporte de Actividades</h1>
+
+            <p class="subtitulo">
+                Registro de actividades de campo
+            </p>
+
+        </div>
+
+
+        <div class="usuario">
+
+            <span>👤</span>
+
+            <div>
+
+                <small>Persona</small>
+
+                <strong>Usuario de campo</strong>
+
+            </div>
+
+        </div>
+
+
+        <button id="btnInicio" class="boton">
+
+            📍 Iniciar actividad
+
+        </button>
+
+
+        <button id="btnFoto" class="boton">
+
+            📸 Tomar fotografía
+
+        </button>
+
+        <input
+            type="file"
+            id="foto"
+            accept="image/*"
+            capture="environment"
+            style="display: none;"
+        >
+
+        <div id="vistaFoto" class="estado">
+
+            📷 Foto pendiente
+
+        </div>
+
+
+        <button id="btnFinalizar" class="boton">
+
+            📍 Finalizar actividad
+
+        </button>
+
+
+        <button id="btnEnviar" class="boton enviar">
+
+            📤 Enviar reporte
+
+        </button>
+
+
+        <div id="estado" class="estado">
+
+            Estado: esperando inicio de actividad
+
+        </div>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
