@@ -207,7 +207,7 @@ btnEnviar.addEventListener("click", async function () {
 
         const datos = {
 
-            persona: "Usuario de campo",
+            persona: document.getElementById("nombrePersona").value.trim(),
 
             inicio: reporte.inicio,
 
