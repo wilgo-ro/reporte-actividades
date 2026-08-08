@@ -166,9 +166,9 @@ btnFinalizar.addEventListener("click", function () {
 
 });
 
-
 // 📤 ENVIAR REPORTE
-btnEnviar.addEventListener("click", function () {
+
+btnEnviar.addEventListener("click", async function () {
 
     console.log("Reporte completo:", reporte);
 
@@ -196,10 +196,156 @@ btnEnviar.addEventListener("click", function () {
         return;
     }
 
-    estado.innerHTML =
-        "✅ Reporte completo<br>" +
-        "📍 Inicio registrado<br>" +
-        "📸 Fotografía registrada<br>" +
-        "📍 Finalización registrada";
+    estado.textContent =
+        "☁️ Preparando reporte...";
+
+    try {
+
+        // Convertir fotografía a Base64
+        const fotoBase64 =
+            await convertirFoto(reporte.foto);
+
+        const datos = {
+
+            persona: "Usuario de campo",
+
+            inicio: reporte.inicio,
+
+            finalizacion: reporte.finalizacion,
+
+            foto: {
+
+                nombre: reporte.foto.name,
+
+                tipo: reporte.foto.type,
+
+                contenido: fotoBase64
+
+            }
+
+        };
+
+        console.log("Datos preparados:", datos);
+
+        // URL DE NUESTRA APLICACIÓN DE APPS SCRIPT
+        const URL_APPS_SCRIPT =
+            "https://script.google.com/macros/s/AKfycbzoUD6lVv1LSdBkerjvawRsqhduxjkYcGLb6bJeg6iEYzwc2Fc8xIPb4p4BIQEgXEKb/exec";
+
+        estado.textContent =
+            "☁️ Enviando reporte...";
+
+        // Crear formulario invisible
+        const formulario =
+            document.createElement("form");
+
+        formulario.method = "POST";
+
+        formulario.action =
+            URL_APPS_SCRIPT;
+
+        formulario.target =
+            "iframeEnvio";
+
+        formulario.style.display =
+            "none";
+
+
+        // Campo que recibirá Apps Script
+        const campo =
+            document.createElement("input");
+
+        campo.type = "hidden";
+
+        campo.name = "datos";
+
+        campo.value =
+            JSON.stringify(datos);
+
+
+        formulario.appendChild(campo);
+
+
+        // Crear iframe invisible
+        const iframe =
+            document.createElement("iframe");
+
+        iframe.name =
+            "iframeEnvio";
+
+        iframe.style.display =
+            "none";
+
+
+        document.body.appendChild(iframe);
+
+        document.body.appendChild(formulario);
+
+
+        // Enviar
+        formulario.submit();
+
+
+        // Mostrar confirmación
+        setTimeout(function () {
+
+            estado.innerHTML =
+                "✅ <strong>Reporte enviado.</strong><br>" +
+                "📍 Inicio registrado<br>" +
+                "📸 Fotografía registrada<br>" +
+                "📍 Finalización registrada";
+
+            console.log(
+                "Reporte enviado a Apps Script."
+            );
+
+        }, 3000);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        estado.textContent =
+            "❌ No fue posible enviar el reporte.";
+
+    }
 
 });
+
+
+// 📸 Convertir fotografía a Base64
+
+function convertirFoto(archivo) {
+
+    return new Promise(function (resolve, reject) {
+
+        const lector =
+            new FileReader();
+
+        lector.onload = function () {
+
+            const resultado =
+                lector.result;
+
+            const base64 =
+                resultado.split(",")[1];
+
+            resolve(base64);
+
+        };
+
+        lector.onerror = function () {
+
+            reject(
+                new Error(
+                    "No se pudo leer la fotografía."
+                )
+            );
+
+        };
+
+        lector.readAsDataURL(archivo);
+
+    });
+
+}
