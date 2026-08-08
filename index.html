@@ -3,101 +3,615 @@
 
 <head>
 
+    <base target="_top">
+
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Reporte de Actividades</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #eef3f9;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .app {
+
+            width: 100%;
+
+            max-width: 430px;
+
+            background: white;
+
+            padding: 28px 25px;
+
+            border-radius: 20px;
+
+            box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+
+            text-align: center;
+        }
+
+        .logo {
+
+            width: 170px;
+
+            margin-bottom: 15px;
+        }
+
+        h1 {
+
+            color: #173f7a;
+
+            font-size: 27px;
+
+            margin-bottom: 7px;
+        }
+
+        .subtitulo {
+
+            color: #666;
+
+            margin-bottom: 25px;
+        }
+
+        .usuario {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            background: #f1f5fa;
+
+            border-left: 5px solid #173f7a;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: left;
+        }
+
+        .usuario span {
+
+            font-size: 30px;
+        }
+
+        .usuario div {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+        .usuario small {
+
+            color: #777;
+        }
+
+        .usuario strong {
+
+            color: #173f7a;
+        }
+
+        .boton {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 15px;
+
+            margin-top: 12px;
+
+            border-radius: 10px;
+
+            background: #173f7a;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .enviar {
+
+            background: #d92d20;
+        }
+
+        .estado {
+
+            margin-top: 20px;
+
+            padding: 12px;
+
+            background: #f3f5f7;
+
+            border-radius: 10px;
+
+            color: #555;
+
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+
+            display: none;
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-    <div class="app">
+<div class="app">
 
-        <div class="encabezado">
+    <!-- Por ahora dejaremos el espacio del logo preparado -->
+    <div style="font-size:50px;">🏥</div>
 
-            <img src="logo.png" alt="E.S.E. Municipal de Soacha Julio César Peñaloza">
+    <h1>Reporte de Actividades</h1>
 
-            <h1>Reporte de Actividades</h1>
-
-            <p class="subtitulo">
-                Registro de actividades de campo
-            </p>
-
-        </div>
+    <p class="subtitulo">
+        Registro de actividades de campo
+    </p>
 
 
-        <div class="usuario">
+    <div class="usuario">
 
-            <span>👤</span>
+        <span>👤</span>
 
-            <div>
+        <div>
 
-                <small>Persona</small>
+            <small>Persona</small>
 
-                <strong>Usuario de campo</strong>
-
-            </div>
-
-        </div>
-
-
-        <button id="btnInicio" class="boton">
-
-            📍 Iniciar actividad
-
-        </button>
-
-
-        <button id="btnFoto" class="boton">
-
-            📸 Tomar fotografía
-
-        </button>
-
-        <input
-            type="file"
-            id="foto"
-            accept="image/*"
-            capture="environment"
-            style="display: none;"
-        >
-
-        <div id="vistaFoto" class="estado">
-
-            📷 Foto pendiente
-
-        </div>
-
-
-        <button id="btnFinalizar" class="boton">
-
-            📍 Finalizar actividad
-
-        </button>
-
-
-        <button id="btnEnviar" class="boton enviar">
-
-            📤 Enviar reporte
-
-        </button>
-
-
-        <div id="estado" class="estado">
-
-            Estado: esperando inicio de actividad
+            <input
+                type="text"
+                id="nombrePersona"
+                placeholder="Escriba su nombre"
+                autocomplete="name"
+            >
 
         </div>
 
     </div>
 
 
-    <script src="app.js"></script>
+    <button id="btnInicio" class="boton">
 
-</body>
+        📍 Iniciar actividad
 
-</html>
+    </button>
+
+
+    <button id="btnFoto" class="boton">
+
+        📸 Tomar fotografía
+
+    </button>
+
+
+    <input
+        type="file"
+        id="foto"
+        accept="image/*"
+        capture="environment"
+    >
+
+
+    <div id="estadoFoto" class="estado">
+
+        📷 Foto pendiente
+
+    </div>
+
+
+    <button id="btnFinalizar" class="boton">
+
+        📍 Finalizar actividad
+
+    </button>
+
+
+    <button id="btnEnviar" class="boton enviar">
+
+        📤 Enviar reporte
+
+    </button>
+
+
+    <div id="estado" class="estado">
+
+        Estado: esperando inicio de actividad
+
+    </div>
+
+</div>
+
+
+<script>
+
+let reporte = {
+
+    inicio: null,
+
+    foto: null,
+
+    finalizacion: null
+
+};
+
+
+// 📍 INICIO
+
+document.getElementById("btnInicio")
+.addEventListener("click", function() {
+
+    const estado =
+        document.getElementById("estado");
+
+    estado.textContent =
+        "📍 Obteniendo ubicación...";
+
+
+    if (!navigator.geolocation) {
+
+        estado.textContent =
+            "❌ Este dispositivo no permite ubicación.";
+
+        return;
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(posicion) {
+
+            const fecha = new Date();
+
+
+            reporte.inicio = {
+
+                fecha:
+                    fecha.toLocaleDateString(),
+
+                hora:
+                    fecha.toLocaleTimeString(),
+
+                latitud:
+                    posicion.coords.latitude,
+
+                longitud:
+                    posicion.coords.longitude
+
+            };
+
+
+            estado.innerHTML =
+                "✅ Actividad iniciada<br>" +
+                "🕐 " + reporte.inicio.hora +
+                "<br>📍 Ubicación registrada";
+
+        },
+
+
+        function() {
+
+            estado.textContent =
+                "⚠️ Debes permitir la ubicación.";
+
+        },
+
+        {
+
+            enableHighAccuracy: true,
+
+            timeout: 10000,
+
+            maximumAge: 0
+
+        }
+
+    );
+
+});
+
+
+// 📸 FOTO
+
+document.getElementById("btnFoto")
+.addEventListener("click", function() {
+
+    document.getElementById("foto").click();
+
+});
+
+
+document.getElementById("foto")
+.addEventListener("change", function() {
+
+    if (this.files.length === 0) {
+
+        return;
+    }
+
+
+    reporte.foto = this.files[0];
+
+
+    document.getElementById("estadoFoto")
+    .textContent =
+        "✅ Fotografía registrada: " +
+        this.files[0].name;
+
+
+    document.getElementById("estado")
+    .textContent =
+        "📸 Fotografía preparada para el reporte.";
+
+});
+
+
+// 📍 FINALIZAR
+
+document.getElementById("btnFinalizar")
+.addEventListener("click", function() {
+
+    const estado =
+        document.getElementById("estado");
+
+
+    estado.textContent =
+        "📍 Obteniendo ubicación final...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(posicion) {
+
+            const fecha = new Date();
+
+
+            reporte.finalizacion = {
+
+                fecha:
+                    fecha.toLocaleDateString(),
+
+                hora:
+                    fecha.toLocaleTimeString(),
+
+                latitud:
+                    posicion.coords.latitude,
+
+                longitud:
+                    posicion.coords.longitude
+
+            };
+
+
+            estado.innerHTML =
+                "✅ Actividad finalizada<br>" +
+                "🕐 " +
+                reporte.finalizacion.hora +
+                "<br>📍 Ubicación final registrada";
+
+        },
+
+
+        function() {
+
+            estado.textContent =
+                "⚠️ No fue posible obtener la ubicación.";
+
+        },
+
+        {
+
+            enableHighAccuracy: true,
+
+            timeout: 10000,
+
+            maximumAge: 0
+
+        }
+
+    );
+
+});
+
+// 📤 ENVIAR REPORTE
+
+document.getElementById("btnEnviar")
+.addEventListener("click", async function() {
+
+    const estado =
+        document.getElementById("estado");
+
+
+    // Verificar inicio
+    if (!reporte.inicio) {
+
+        estado.textContent =
+            "⚠️ Primero debes iniciar la actividad.";
+
+        return;
+    }
+
+
+    // Verificar fotografía
+    if (!reporte.foto) {
+
+        estado.textContent =
+            "⚠️ Primero debes tomar la fotografía.";
+
+        return;
+    }
+
+
+    // Verificar finalización
+    if (!reporte.finalizacion) {
+
+        estado.textContent =
+            "⚠️ Primero debes finalizar la actividad.";
+
+        return;
+    }
+
+
+    estado.textContent =
+        "📤 Preparando reporte...";
+
+
+    try {
+
+        // Convertir la fotografía a Base64
+        const fotoBase64 =
+            await convertirFoto(reporte.foto);
+
+
+        // Datos que enviaremos a Google
+        const nombrePersona =
+            document.getElementById("nombrePersona").value.trim();
+
+        if (!nombrePersona) {
+            estado.textContent =
+                "⚠️ Primero debes escribir tu nombre.";
+            return;
+        }
+
+        const datos = {
+
+            persona:
+                nombrePersona,
+
+            inicio:
+                reporte.inicio,
+
+            finalizacion:
+                reporte.finalizacion,
+
+            foto: {
+
+                nombre:
+                    reporte.foto.name,
+
+                tipo:
+                    reporte.foto.type,
+
+                contenido:
+                    fotoBase64
+
+            }
+
+        };
+
+
+        estado.textContent =
+            "☁️ Enviando reporte...";
+
+
+        google.script.run
+
+            .withSuccessHandler(function(respuesta) {
+
+                estado.innerHTML =
+                    "✅ <strong>Reporte enviado correctamente.</strong><br>" +
+                    "📊 Información guardada<br>" +
+                    "📸 Fotografía guardada";
+
+            })
+
+            .withFailureHandler(function(error) {
+
+                console.error(error);
+
+                estado.textContent =
+                    "❌ No fue posible enviar el reporte.";
+
+            })
+
+            .guardarReporte(datos);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        estado.textContent =
+            "❌ No fue posible preparar la fotografía.";
+
+    }
+
+});
+
+
+// 📸 Convertir fotografía a Base64
+
+function convertirFoto(archivo) {
+
+    return new Promise(function(resolve, reject) {
+
+        const lector =
+            new FileReader();
+
+
+        lector.onload = function() {
+
+            const resultado =
+                lector.result;
+
+            // Quitar "data:image/...;base64,"
+            const base64 =
+                resultado.split(",")[1];
+
+            resolve(base64);
+
+        };
+
+
+        lector.onerror = function() {
+
+            reject(
+                new Error(
+                    "No se pudo leer la fotografía."
+                )
+            );
+
+        };
+
+
+        lector.readAsDataURL(archivo);
+
+    });
+
+}
