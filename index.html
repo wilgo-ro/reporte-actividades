@@ -539,29 +539,62 @@ document.getElementById("btnEnviar")
         estado.textContent =
             "☁️ Enviando reporte...";
 
+        // URL DE NUESTRA APLICACIÓN DE APPS SCRIPT
+        const URL_APPS_SCRIPT =
+            "https://script.google.com/macros/s/AKfycbzoUD6lVv1LSdBkerjvawRsqhduxjkYcGLb6bJeg6iEYzwc2Fc8xIPb4p4BIQEgXEKb/exec";
 
-        google.script.run
 
-            .withSuccessHandler(function(respuesta) {
+// Crear formulario invisible
+        const formulario = document.createElement("form");
 
-                estado.innerHTML =
-                    "✅ <strong>Reporte enviado correctamente.</strong><br>" +
-                    "📊 Información guardada<br>" +
-                    "📸 Fotografía guardada";
+        formulario.method = "POST";
 
-            })
+        formulario.action = URL_APPS_SCRIPT;
 
-            .withFailureHandler(function(error) {
+        formulario.target = "iframeEnvio";
 
-                console.error(error);
+        formulario.style.display = "none";
 
-                estado.textContent =
-                    "❌ No fue posible enviar el reporte.";
 
-            })
+// Campo con los datos
+        const campo = document.createElement("input");
 
-            .guardarReporte(datos);
+        campo.type = "hidden";
 
+        campo.name = "datos";
+
+        campo.value = JSON.stringify(datos);
+
+        formulario.appendChild(campo);
+
+
+// Crear iframe invisible
+        const iframe = document.createElement("iframe");
+
+        iframe.name = "iframeEnvio";
+
+        iframe.style.display = "none";
+
+
+// Agregar elementos
+        document.body.appendChild(iframe);
+
+        document.body.appendChild(formulario);
+
+
+// Enviar reporte
+        formulario.submit();
+
+
+// Mostrar confirmación
+        setTimeout(function () {
+
+            estado.innerHTML =
+                "✅ <strong>Reporte enviado correctamente.</strong><br>" +
+                "📊 Información guardada<br>" +
+                "📸 Fotografía guardada";
+
+        }, 3000);
 
     } catch (error) {
 
